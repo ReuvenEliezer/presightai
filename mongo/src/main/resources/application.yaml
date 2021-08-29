@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+kafka:
+  bootstrap:
+    address: localhost
+    port: 29092
+  consumer:
+    auto-offset-reset: earliest
+    topic: topic
+    group-id: myId
+mongo:
+  url: mongodb://root:example@localhost:27017/test?authSource=admin
+  table-name: test
