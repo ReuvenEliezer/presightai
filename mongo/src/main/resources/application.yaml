@@ -1,7 +1,7 @@
-spring:
-  data:
-    mongodb:
-      auto-index-creation: true
+#spring:
+#  data:
+#    mongodb:
+#      auto-index-creation: true
 kafka:
   bootstrap:
     address: localhost
@@ -10,6 +10,6 @@ kafka:
     auto-offset-reset: earliest
     topic: topic
     group-id: myId
-mongo:
-  url: mongodb://root:example@localhost:27017/test?authSource=admin
-  table-name: test
+#mongo:
+#  url: mongodb://root:example@localhost:27017/test?authSource=admin
+#  table-name: test

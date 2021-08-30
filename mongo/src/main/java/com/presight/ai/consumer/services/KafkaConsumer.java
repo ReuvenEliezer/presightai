@@ -47,6 +47,10 @@ public class KafkaConsumer {
     }
 
     private void savePersonByPhone(Person person) {
+        /**
+         * https://docs.mongodb.com/manual/core/index-single/
+         * https://stackoverflow.com/questions/9730136/how-to-create-a-nested-index-in-mongodb/9730214
+         */
         person.getPhoneList().forEach(p -> {
             //TODO save each person by phone num ??
         });
