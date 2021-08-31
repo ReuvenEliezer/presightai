@@ -8,8 +8,8 @@ kafka:
     port: 29092
   consumer:
     auto-offset-reset: earliest
-    topic: topic
-    group-id: myId
+    topic: person-topic
+    group-id: person-group
 #mongo:
 #  url: mongodb://root:example@localhost:27017/test?authSource=admin
 #  table-name: test

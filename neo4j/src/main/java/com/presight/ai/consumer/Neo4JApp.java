@@ -1,4 +1,4 @@
-package com.presight.ai;
+package com.presight.ai.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,9 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
         "com.presight.ai.repositories",
         "com.presight.ai.services",
 })
-public class JoinDataApp {
+public class Neo4JApp {
     public static void main(String[] args) {
-        SpringApplication.run(JoinDataApp.class, args);
+        SpringApplication.run(Neo4JApp.class, args);
     }
 }
 

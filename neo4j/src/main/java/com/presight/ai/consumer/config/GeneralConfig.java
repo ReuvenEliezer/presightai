@@ -1,4 +1,4 @@
-package com.presight.ai.config;
+package com.presight.ai.consumer.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;

@@ -1,0 +1,8 @@
+kafka:
+  bootstrap:
+    address: localhost
+    port: 29092
+  consumer:
+    auto-offset-reset: earliest
+    topic: calls-topic
+    group-id: calls-group
