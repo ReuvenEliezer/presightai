@@ -1,4 +1,4 @@
-package com.presight.ai.consumer.service;
+package com.presight.ai.consumer.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -20,8 +20,7 @@ public class KafkaConsumer {
     private ObjectMapper objectMapper;
 
 
-    @KafkaListener(topics = "${kafka.consumer.topic}",
-            groupId = "${kafka.consumer.group-id}",
+    @KafkaListener(topics = "${kafka.consumer.calls-topic}",
             containerFactory = "kafkaListenerContainerFactory")
     public void callsTopicListener(@Payload String message,
                                     @Header(KafkaHeaders.ACKNOWLEDGMENT) Acknowledgment acknowledgment,

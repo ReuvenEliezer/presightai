@@ -4,5 +4,5 @@ kafka:
     port: 29092
   consumer:
     auto-offset-reset: earliest
-    topic: calls-topic
-    group-id: calls-group
+    calls-topic: calls-topic
+    calls-group-id: calls-group

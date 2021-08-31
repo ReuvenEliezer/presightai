@@ -26,7 +26,7 @@ public class KafkaConsumerConfig {
     }
 
 
-    @Value(value = "${kafka.consumer.group-id}")
+    @Value(value = "${kafka.consumer.calls-group-id}")
     private String groupId;
 
     @Value(value = "${kafka.bootstrap.address}")
