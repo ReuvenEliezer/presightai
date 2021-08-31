@@ -59,7 +59,7 @@ services:
     volumes:
       - ./neo4j/plugins:/plugins
     environment:
-      NEO4J_AUTH: neo4j/streams
+      NEO4J_AUTH: neo4j:secret
       NEO4J_dbms_logs_debug_level: DEBUG
       # KAFKA related configuration
       NEO4J_kafka_bootstrap_servers: kafka:9092

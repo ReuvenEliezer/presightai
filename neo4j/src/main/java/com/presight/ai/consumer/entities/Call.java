@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
@@ -12,6 +13,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 @Node
 @Data
+@NoArgsConstructor// Empty constructor required as of Neo4j API 2.0.5
 public class Call {
 
     @Id
@@ -19,10 +21,6 @@ public class Call {
     private Long id;
 
     private String phoneNumber;
-
-    private Call() {
-        // Empty constructor required as of Neo4j API 2.0.5
-    }
 
     public Call(String phoneNumber) {
         this.phoneNumber = phoneNumber;

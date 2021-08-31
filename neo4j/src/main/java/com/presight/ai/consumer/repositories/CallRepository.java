@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface CallRepository extends Neo4jRepository<Call, Long> {
 
-//    Call findByName(String phoneNumber);
+    Call findByPhoneNumber(String phoneNumber);
 
-//    List<Call> findByTeammatesName(String name);
+    List<Call> findByTeammatesPhoneNumber(String phoneNumber);
 }

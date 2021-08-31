@@ -16,9 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Document(collection = "person")
 public class Person implements Serializable {
 
