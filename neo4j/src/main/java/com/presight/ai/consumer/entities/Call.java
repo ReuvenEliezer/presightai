@@ -1,53 +1,52 @@
 package com.presight.ai.consumer.entities;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
-@Node
 @Data
 @NoArgsConstructor// Empty constructor required as of Neo4j API 2.0.5
 public class Call {
 
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.NONE)
     private Long id;
 
-    private String phoneNumber;
 
-    public Call(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    private String fromPhoneNum;
+    private String toPhoneNum;
+    private LocalDateTime calTime;
+    private Duration callDuration;
+    private RegineTypeEnum regineFrom;
+    private RegineTypeEnum regineTo;
+//    private String provider; // TODO?
+
+    public Call(String fromPhoneNum, String toPhoneNum, LocalDateTime calTime, Duration callDuration, RegineTypeEnum regineFrom, RegineTypeEnum regineTo){
+        this.fromPhoneNum = fromPhoneNum;
+        this.toPhoneNum = toPhoneNum;
+        this.calTime = calTime;
+        this.callDuration = callDuration;
+        this.regineFrom = regineFrom;
+        this.regineTo = regineTo;
     }
 
-    /**
-     * Neo4j doesn't REALLY have bi-directional relationships. It just means when querying
-     * to ignore the direction of the relationship.
-     * https://dzone.com/articles/modelling-data-neo4j
-     */
-    @Relationship(type = "TEAMMATE")
-    public List<Call> teammates;
+//    @Relationship(type = "OUTCOMINGCALLS", direction = Relationship.Direction.OUTGOING)
+//    public List<Phone> outComingCalls = new ArrayList<>();
+//
+//    public void addPhoneDestination(Phone phone) {
+//        outComingCalls.add(phone);
+//    }
 
-    public void callsTo(Call call) {
-        if (teammates == null) {
-            teammates = new ArrayList<>();
-        }
-        teammates.add(call);
-    }
-
-    public String toString() {
-
-        return this.phoneNumber + "'s teammates => "
-                + Optional.ofNullable(this.teammates).orElse(
-                        Collections.emptyList()).stream()
-                .map(Call::getPhoneNumber)
-                .collect(Collectors.toList());
-    }
 
 }
+
+
