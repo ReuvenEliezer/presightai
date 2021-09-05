@@ -10,13 +10,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @NoArgsConstructor
 @AllArgsConstructor
 @Node("Skill")
-public class Skill {
-
-    @Id
-    @GeneratedValue
-    @Setter(AccessLevel.NONE)
-    private Long id;
-
+public class Skill extends BaseEntity {
     private String name;
     private String description;
 }

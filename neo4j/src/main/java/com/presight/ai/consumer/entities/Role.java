@@ -8,11 +8,7 @@ import org.springframework.data.neo4j.core.schema.TargetNode;
 import java.util.List;
 
 @RelationshipProperties
-public class Role {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Role extends BaseEntity {
 
     private List<String> roles;
 

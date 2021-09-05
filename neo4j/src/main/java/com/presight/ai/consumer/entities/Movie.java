@@ -7,21 +7,16 @@ import org.springframework.data.neo4j.core.schema.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Node("Movie")
-public class Movie {
-
-    @Id
-    @GeneratedValue
-    @Setter(AccessLevel.NONE)
-    private Long id;
+public class Movie extends BaseEntity {
 
     private String title;
-
 
     @Property("tagline")
     private String description;
@@ -36,6 +31,5 @@ public class Movie {
 
     @Relationship(type = "DIRECTED", direction = Relationship.Direction.INCOMING)
     private List<Person> directors = new ArrayList<>();
-
 
 }

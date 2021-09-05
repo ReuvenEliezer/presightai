@@ -13,12 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 //@AllArgsConstructor
 @Node("Person")
-public class Person {
-
-    @Id
-    @GeneratedValue
-    @Setter(AccessLevel.NONE)
-    private Long id;
+public class Person extends BaseEntity {
 
     private String name;
 

@@ -13,12 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelationshipProperties
-public class SkillRating {
-
-    @Id
-    @GeneratedValue
-    @Setter(AccessLevel.NONE)
-    private Long graphId;
+public class SkillRating extends BaseEntity{
 
     private Integer score;
     private LocalDate measurementDate;
