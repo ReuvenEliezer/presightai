@@ -52,7 +52,7 @@ public class KafkaConsumer {
          * https://stackoverflow.com/questions/9730136/how-to-create-a-nested-index-in-mongodb/9730214
          */
         person.getPhoneList().forEach(p -> {
-            //TODO save each person by phone num ??
+            //TODO save each person by phone num with start & end date owner ??
         });
         person = peopleRepository.save(person);
         logger.info("person {} entity saved successful", person.toString());

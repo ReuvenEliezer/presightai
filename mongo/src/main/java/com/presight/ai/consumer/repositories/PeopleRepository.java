@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PeopleRepository extends MongoRepository<Person, Long> {
 
-    @Query(value="{ 'first_name' : ?0 }")
-    List<Person> findByFirstname(String firstname);
+//    @Query(value="{ 'first_name' : ?0 }")
+//    List<Person> findByFirstname(String firstname);
 }

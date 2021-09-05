@@ -1,35 +1,32 @@
 //package com.presight.ai.consumer.entities;
 //
-//import lombok.*;
+//import lombok.AccessLevel;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
+//import org.neo4j.ogm.annotation.GeneratedValue;
+//import org.neo4j.ogm.annotation.Id;
+//import org.neo4j.ogm.annotation.NodeEntity;
 //import org.neo4j.ogm.annotation.Relationship;
 //
 //import java.util.ArrayList;
-//import java.util.HashSet;
 //import java.util.List;
-//import org.springframework.data.neo4j.core.schema.Node;
-//
 //
 //@NoArgsConstructor// Empty constructor required as of Neo4j API 2.0.5
 //@Data
-//@Node("Phone")
-//public class Phone {
+//@NodeEntity("User")
+//public class User {
 //
 //    @Id
 //    @GeneratedValue
 //    @Setter(AccessLevel.NONE)
 //    private Long id;
 //
-//    private String phoneNumber;
+//    private String name;
+//    private Double age;
 //
-//    public Phone(String phoneNumber) {
-//        this.phoneNumber = phoneNumber;
-//    }
 //
 //    @Relationship(type = "RATED",direction = Relationship.INCOMING)
-//    private List<Call> calls= new ArrayList<>();
-//
-//
-//
-//
+//    private List<Movie> movies= new ArrayList<>();
 //
 //}
