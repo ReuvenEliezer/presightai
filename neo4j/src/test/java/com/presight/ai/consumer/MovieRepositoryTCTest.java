@@ -1,13 +1,11 @@
 package com.presight.ai.consumer;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import com.presight.ai.consumer.entities.Movie;
-import com.presight.ai.consumer.entities.Person;
-import com.presight.ai.consumer.entities.Role;
-import com.presight.ai.consumer.repositories.MovieRepository;
+import com.presight.ai.consumer.entities.*;
+import com.presight.ai.consumer.repositories.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,6 +43,18 @@ public class MovieRepositoryTCTest {
     @Autowired
     private MovieRepository movieRepository;
 
+//    @Autowired
+//    private UserRepository userRepository;
+//
+//    @Autowired
+//    private ReportRepository reportRepository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
 //    @Before
 //    public void initializeNeo4j() {
 //
@@ -56,6 +66,57 @@ public class MovieRepositoryTCTest {
 //    @After
 //    public void stopNeo4j() {
 //        neo4jContainer.close();
+//    }
+
+    @Test
+    public void t2() {
+        authorRepository.deleteAll();
+        bookRepository.deleteAll();
+
+        Book book1 = new Book("Invisible Man", "English");
+        Book book2 = new Book("Moby Dick", "English");
+        Book book3 = new Book("Hamlet", "English");
+        bookRepository.saveAll(Arrays.asList(book1, book2, book3));
+
+        authorRepository.save(new Author("Ralph Ellison", Collections.singletonList(book1)));
+        authorRepository.save(new Author("William Shakespeare", Collections.singletonList(book2)));
+        authorRepository.save(new Author("Herman Melville", Collections.singletonList(book3)));
+        /**
+         * CREATE (Invisible_Man:Book {title: 'Invisible Man', language: 'English'})
+         * CREATE (Moby_Dick:Book {title: 'Moby Dick', language: 'English'})
+         * CREATE (Hamlet:Book {title: 'Hamlet', language: 'English'})
+         * CREATE (Ellison:Author {name: 'Ralph Ellison'})
+         * CREATE (Shakespeare:Author {name: 'William Shakespeare'})
+         * CREATE (Melville:Author {name: 'Herman Melville'})
+         *
+         * CREATE
+         * (Invisible_Man)-[:AUTHORED]->(Ellison),
+         * (Moby_Dick)-[:AUTHORED]->(Melville),
+         * (Hamlet)-[:AUTHORED]->(Shakespeare)
+         * ;
+         */
+        List<Author> allAuthors = authorRepository.getAllAuthors();
+        List<Book> h = bookRepository.findByTitleContaining("a");
+        List<Book> allBooks = bookRepository.getAllBooks();
+        Book hamlet = bookRepository.findByTitle("Hamlet");
+        List<Book> english = bookRepository.findByLanguage("English");
+    }
+
+//    @Test
+//    public void t1() {
+//        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+//
+//
+//        Report report = new Report();
+//        report.setTitle("titel");
+//        report.setDescription("Description");
+//        report.setDate(formatter.format(new Date()));
+//
+//        Report newReport = reportRepository.save(report);
+//
+//        userRepository.createReportRelationship("userName", newReport.getId());
+//        reportRepository.createBelongRelationship(newReport.getId(), "EntityName");
+//
 //    }
 
     @Test
