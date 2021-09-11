@@ -1,13 +1,15 @@
+info:
+  app:
+    name: @project.artifactId@
+    version: @project.version@
 spring:
   server:
     port: 8086
-  application:
-    name: presight.ai.neo4j
-  output.ansi.enabled: always
-  info:
-    app:
-      name: @project.artifactId@
-      version: @project.version@
+#  application:
+#    name: presight.ai.neo4j
+  output:
+    ansi:
+      enabled: always
   data:
     neo4j:
       uri: bolt://localhost:7687

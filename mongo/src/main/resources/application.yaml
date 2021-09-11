@@ -1,3 +1,7 @@
+info:
+  app:
+    name: @project.artifactId@
+    version: @project.version@
 #spring:
 #  data:
 #    mongodb:
