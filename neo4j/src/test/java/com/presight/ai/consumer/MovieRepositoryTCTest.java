@@ -65,8 +65,8 @@ public class MovieRepositoryTCTest {
     @Autowired
     private PhoneRepository phoneRepository;
 
-    @Autowired
-    private CallRepository callRepository;
+//    @Autowired
+//    private CallRepository callRepository;
 
 //    @Before
 //    public void initializeNeo4j() {
@@ -81,35 +81,35 @@ public class MovieRepositoryTCTest {
 //        neo4jContainer.close();
 //    }
 
-    @Test
-    public void callsTest() {
-        phoneRepository.deleteAll();
-        callRepository.deleteAll();
-
-        Call call = Call.builder()
-                .fromPhoneNum("+972505777777")
-                .toPhoneNum("+972505111111")
-                .callDuration(Duration.ofMinutes(20))
-                .calTime(LocalDateTime.now(ZoneOffset.UTC).minus(Duration.ofHours(1)))
-                .build();
-        callRepository.save(call);
-        Phone phoneFrom = Phone.builder()
-                .phoneNumber(call.getFromPhoneNum())
-                .calls(Collections.singletonList(call))
-                .build();
-
-        Phone phoneTo = Phone.builder()
-                .phoneNumber(call.getToPhoneNum())
-                .build();
-//        phoneRepository.findAll().stream().filter(p->p.getPhoneNumber().equals(call.ro))
-
-        phoneRepository.save(phoneTo);
-        phoneRepository.save(phoneFrom);
-
-        List<Phone> phones = phoneRepository.findAll();
-        List<Call> calls = callRepository.findAll();
-//        Collection<Phone> allPhones = phoneRepository.getAllPhones();
-    }
+//    @Test
+//    public void callsTest() {
+//        phoneRepository.deleteAll();
+//        callRepository.deleteAll();
+//
+//        Call call = Call.builder()
+//                .fromPhoneNum("+972505777777")
+//                .toPhoneNum("+972505111111")
+//                .callDuration(Duration.ofMinutes(20))
+//                .calTime(LocalDateTime.now(ZoneOffset.UTC).minus(Duration.ofHours(1)))
+//                .build();
+//        callRepository.save(call);
+//        Phone phoneFrom = Phone.builder()
+//                .phoneNumber(call.getFromPhoneNum())
+//                .calls(Collections.singletonList(call))
+//                .build();
+//
+//        Phone phoneTo = Phone.builder()
+//                .phoneNumber(call.getToPhoneNum())
+//                .build();
+////        phoneRepository.findAll().stream().filter(p->p.getPhoneNumber().equals(call.ro))
+//
+//        phoneRepository.save(phoneTo);
+//        phoneRepository.save(phoneFrom);
+//
+//        List<Phone> phones = phoneRepository.findAll();
+//        List<Call> calls = callRepository.findAll();
+////        Collection<Phone> allPhones = phoneRepository.getAllPhones();
+//    }
 
     @Test
     public void t2() {
@@ -164,9 +164,46 @@ public class MovieRepositoryTCTest {
 //
 //    }
 
+    @Test
+    public void callTest() {
+        phoneRepository.deleteAll();
+
+        Phone caller = Phone.builder()
+                .phoneNumber("from +972...")
+                .build();
+
+        Phone called = Phone.builder()
+                .phoneNumber("to +972...")
+                .build();
+
+        Call call1 = Call.builder()
+                .phone(called)
+                .fromPhoneNum(caller.getPhoneNumber())
+                .toPhoneNum(called.getPhoneNumber())
+                .calTime(LocalDateTime.now())
+                .callDuration(Duration.ofMinutes(10))
+                .regineFrom(RegineTypeEnum.ISRAEL)
+                .regineTo(RegineTypeEnum.UK)
+                .build();
+
+        Call call2 = Call.builder()
+                .phone(called)
+                .fromPhoneNum(caller.getPhoneNumber())
+                .toPhoneNum(called.getPhoneNumber())
+                .calTime(LocalDateTime.now().minusHours(1))
+                .callDuration(Duration.ofMinutes(20))
+                .regineFrom(RegineTypeEnum.US)
+                .regineTo(RegineTypeEnum.US)
+                .build();
+       phoneRepository.save(called);
+
+        caller.setCalls(Arrays.asList(call1,call2));
+        phoneRepository.save(caller);
+
+    }
 
     @Test
-    public void test() {
+    public void movieTest() {
 
         personRepository.deleteAll();
         movieRepository.deleteAll();
@@ -177,7 +214,7 @@ public class MovieRepositoryTCTest {
         person1 = personRepository.save(person1);
         person2 = personRepository.save(person2);
         Actor actor1 = Actor.builder()
-                .roles(Collections.singletonList("actor 1 role"))
+                .roles(Arrays.asList("actor 1 role", "actor2"))
                 .person(person1)
                 .build();
 

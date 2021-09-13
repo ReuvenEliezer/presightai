@@ -1,20 +1,29 @@
+//package com.presight.ai.consumer.entities;
 package com.presight.ai.consumer.entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.RelationshipProperties;
+import org.springframework.data.neo4j.core.schema.TargetNode;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import lombok.*;
-import org.springframework.data.neo4j.core.schema.*;
 
 @Data
 @Builder
-@NoArgsConstructor// Empty constructor required as of Neo4j API 2.0.5
+@NoArgsConstructor
 @AllArgsConstructor
-//@RelationshipProperties
-@Node("Call")
-public class Call extends BaseEntity {
+@RelationshipProperties
+public class Call {//extends BaseEntity {
+
+    @Id
+    @GeneratedValue
+//    @Setter(AccessLevel.NONE)
+    private Long id;
 
     private String fromPhoneNum;
     private String toPhoneNum;
@@ -23,11 +32,10 @@ public class Call extends BaseEntity {
     private RegineTypeEnum regineFrom;
     private RegineTypeEnum regineTo;
 
-//    @TargetNode
-//    private Phone phone;
+    @TargetNode
+    private Phone phone;
 
-//    private String provider; // TODO?
+    //    private String provider; // TODO?
 
 }
-
 
