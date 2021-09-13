@@ -18,5 +18,5 @@ public interface MovieRepository extends Neo4jRepository<Movie, Long> {
     )
     List<Movie> findAllOnShortestPathBetween(@Param("person1") Long person1, @Param("person2") Long person2);
 
-//    Mono<Movie> findOneByTitle(String title);
+    Movie findOneByTitle(String title);
 }

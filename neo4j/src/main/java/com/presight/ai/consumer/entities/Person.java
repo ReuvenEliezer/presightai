@@ -7,6 +7,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 //@Builder
@@ -24,6 +26,8 @@ public class Person extends BaseEntity {
         this.name = name;
     }
 
+    @Relationship(value = "REVIEWED", direction =Relationship.Direction.OUTGOING)
+    private List<Movie> reviewed = new ArrayList<>();
 
 //    private String firstName;
 //    private String lastName;

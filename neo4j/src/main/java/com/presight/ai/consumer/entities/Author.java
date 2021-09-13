@@ -18,5 +18,5 @@ public class Author extends BaseEntity {
     private String name;
 
     @Relationship(type = "AUTHORED", direction = Relationship.Direction.INCOMING)
-    private List<Book> books;//= new ArrayList<>();
+    private List<Book> books;
 }

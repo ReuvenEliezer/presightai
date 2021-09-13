@@ -2,6 +2,9 @@ package com.presight.ai.consumer;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 import com.presight.ai.consumer.entities.*;
@@ -13,6 +16,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
+import org.neo4j.driver.internal.shaded.reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +47,9 @@ public class MovieRepositoryTCTest {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private PersonRepository personRepository;
+
 //    @Autowired
 //    private UserRepository userRepository;
 //
@@ -54,6 +61,12 @@ public class MovieRepositoryTCTest {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private PhoneRepository phoneRepository;
+
+    @Autowired
+    private CallRepository callRepository;
 
 //    @Before
 //    public void initializeNeo4j() {
@@ -67,6 +80,36 @@ public class MovieRepositoryTCTest {
 //    public void stopNeo4j() {
 //        neo4jContainer.close();
 //    }
+
+    @Test
+    public void callsTest() {
+        phoneRepository.deleteAll();
+        callRepository.deleteAll();
+
+        Call call = Call.builder()
+                .fromPhoneNum("+972505777777")
+                .toPhoneNum("+972505111111")
+                .callDuration(Duration.ofMinutes(20))
+                .calTime(LocalDateTime.now(ZoneOffset.UTC).minus(Duration.ofHours(1)))
+                .build();
+        callRepository.save(call);
+        Phone phoneFrom = Phone.builder()
+                .phoneNumber(call.getFromPhoneNum())
+                .calls(Collections.singletonList(call))
+                .build();
+
+        Phone phoneTo = Phone.builder()
+                .phoneNumber(call.getToPhoneNum())
+                .build();
+//        phoneRepository.findAll().stream().filter(p->p.getPhoneNumber().equals(call.ro))
+
+        phoneRepository.save(phoneTo);
+        phoneRepository.save(phoneFrom);
+
+        List<Phone> phones = phoneRepository.findAll();
+        List<Call> calls = callRepository.findAll();
+//        Collection<Phone> allPhones = phoneRepository.getAllPhones();
+    }
 
     @Test
     public void t2() {
@@ -96,6 +139,8 @@ public class MovieRepositoryTCTest {
          * ;
          */
         List<Author> allAuthors = authorRepository.getAllAuthors();
+        List<Author> allAuthors1 = authorRepository.findAll();
+
         List<Book> h = bookRepository.findByTitleContaining("a");
         List<Book> allBooks = bookRepository.getAllBooks();
         Book hamlet = bookRepository.findByTitle("Hamlet");
@@ -119,19 +164,63 @@ public class MovieRepositoryTCTest {
 //
 //    }
 
+
+    @Test
+    public void test() {
+
+        personRepository.deleteAll();
+        movieRepository.deleteAll();
+
+
+        Person person1 = new Person(1931, "person 1");
+        Person person2 = new Person(1951, "person 2");
+        person1 = personRepository.save(person1);
+        person2 = personRepository.save(person2);
+        Actor actor1 = Actor.builder()
+                .roles(Collections.singletonList("actor 1 role"))
+                .person(person1)
+                .build();
+
+        Actor actor2 = Actor.builder()
+                .roles(Collections.singletonList("actor 2 role"))
+                .person(person2)
+                .build();
+
+        Movie movie = Movie.builder()
+                .title("title")
+                .description("description")
+                .actors(Collections.singletonList(actor1))
+                .build();
+        movie = movieRepository.save(movie);
+        person1.setReviewed(Collections.singletonList(movie));
+        personRepository.save(person1);
+        person2.setReviewed(Collections.singletonList(movie));
+        personRepository.save(person2);
+        List<Movie> all = movieRepository.findAll();
+//        neo4jTemplate.save(movie);
+
+        Optional<Person> person = neo4jTemplate.findById(person1.getId(), Person.class);
+        List<Movie> allOnShortestPathBetween = movieRepository.findAllOnShortestPathBetween(person1.getId(), person2.getId());
+        Movie title = movieRepository.findOneByTitle("title");
+//        assertThat(person).map(PersonEntity::getBorn).hasValue(1931);
+
+//        assertThat(neo4jTemplate.count(PersonEntity.class)).isEqualTo(2L);
+    }
+
     @Test
     public void shouldSaveAndReadEntities() {
 
-        Movie movie = new Movie("The Love Bug",
-                "A movie that follows the adventures of Herbie, Herbie's driver, "
-                        + "Jim Douglas (Dean Jones), and Jim's love interest, " + "Carole Bennett (Michele Lee)");
+        Movie movie = Movie.builder()
+                .title("title")
+                .description("description")
+                .build();
 
         Person person1 = new Person(1931, "Dean Jones");
         Person person2 = new Person(1942, "Michele Lee");
         Role roles1 = new Role(person1, Collections.singletonList("Didi"));
         Role roles2 = new Role(person2, Collections.singletonList("Michi"));
-        movie.getActorsAndRoles().add(roles1);
-        movie.getActorsAndRoles().add(roles2);
+//        movie.getActorsAndRoles().add(roles1);
+//        movie.getActorsAndRoles().add(roles2);
 
         movieRepository.save(movie);
         List<Movie> all = movieRepository.findAll();
