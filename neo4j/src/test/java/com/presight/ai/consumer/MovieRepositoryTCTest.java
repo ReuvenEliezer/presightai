@@ -3,6 +3,7 @@ package com.presight.ai.consumer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -165,6 +166,49 @@ public class MovieRepositoryTCTest {
 //    }
 
     @Test
+    public void multipleCallsTest() {
+        phoneRepository.deleteAll();
+        personRepository.deleteAll();
+        Phone person1Phone1 = Phone.builder()
+                .phoneNumber("+97254...")
+                .build();
+        Phone person1Phone2 = Phone.builder()
+                .phoneNumber("+97250...")
+                .build();
+        Person person1 = Person.builder()
+                .firstName("person 1")
+                .birthday(LocalDate.ofYearDay(2020, 1))
+                .phones(Arrays.asList(person1Phone1, person1Phone2))
+                .build();
+        personRepository.save(person1);
+
+
+        Phone person2Phone1 = Phone.builder()
+                .phoneNumber("+97252")
+                .build();
+
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .birthday(LocalDate.ofYearDay(2010, 1))
+                .phones(Collections.singletonList(person2Phone1))
+                .build();
+
+        personRepository.save(person2);
+
+        Call call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now(), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
+        phoneRepository.save(person2.getPhones().get(0));
+
+        person1.getPhones().get(0).setCalls(Arrays.asList(call1, call2));
+        phoneRepository.save(person1.getPhones().get(0));
+
+        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), 30, RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
+        person2.getPhones().get(0).setCalls(Collections.singletonList(call3));
+        phoneRepository.save(person2.getPhones().get(0));
+    }
+
+
+    @Test
     public void callTest() {
         phoneRepository.deleteAll();
 
@@ -176,30 +220,24 @@ public class MovieRepositoryTCTest {
                 .phoneNumber("to +972...")
                 .build();
 
-        Call call1 = Call.builder()
-                .phone(called)
-                .fromPhoneNum(caller.getPhoneNumber())
-                .toPhoneNum(called.getPhoneNumber())
-                .calTime(LocalDateTime.now())
-                .callDuration(Duration.ofMinutes(10))
-                .regineFrom(RegineTypeEnum.ISRAEL)
-                .regineTo(RegineTypeEnum.UK)
-                .build();
+        Call call1 = createCall(caller, called, LocalDateTime.now(), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call call2 = createCall(caller, called, LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
+        phoneRepository.save(called);
 
-        Call call2 = Call.builder()
-                .phone(called)
-                .fromPhoneNum(caller.getPhoneNumber())
-                .toPhoneNum(called.getPhoneNumber())
-                .calTime(LocalDateTime.now().minusHours(1))
-                .callDuration(Duration.ofMinutes(20))
-                .regineFrom(RegineTypeEnum.US)
-                .regineTo(RegineTypeEnum.US)
-                .build();
-       phoneRepository.save(called);
-
-        caller.setCalls(Arrays.asList(call1,call2));
+        caller.setCalls(Arrays.asList(call1, call2));
         phoneRepository.save(caller);
+    }
 
+    private Call createCall(Phone caller, Phone called, LocalDateTime now, int i, RegineTypeEnum israel, RegineTypeEnum uk) {
+        return Call.builder()
+                .phone(called)
+                .fromPhoneNum(caller.getPhoneNumber())
+                .toPhoneNum(called.getPhoneNumber())
+                .calTime(now)
+                .callDuration(Duration.ofMinutes(i))
+                .regineFrom(israel)
+                .regineTo(uk)
+                .build();
     }
 
     @Test
@@ -209,8 +247,14 @@ public class MovieRepositoryTCTest {
         movieRepository.deleteAll();
 
 
-        Person person1 = new Person(1931, "person 1");
-        Person person2 = new Person(1951, "person 2");
+        Person person1 = Person.builder()
+                .firstName("person1")
+                .birthday(LocalDate.ofYearDay(1950, 1))
+                .build();
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .birthday(LocalDate.ofYearDay(1970, 1))
+                .build();
         person1 = personRepository.save(person1);
         person2 = personRepository.save(person2);
         Actor actor1 = Actor.builder()
@@ -252,8 +296,14 @@ public class MovieRepositoryTCTest {
                 .description("description")
                 .build();
 
-        Person person1 = new Person(1931, "Dean Jones");
-        Person person2 = new Person(1942, "Michele Lee");
+        Person person1 = Person.builder()
+                .firstName("person1")
+                .birthday(LocalDate.ofYearDay(1950, 1))
+                .build();
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .birthday(LocalDate.ofYearDay(1970, 1))
+                .build();
         Role roles1 = new Role(person1, Collections.singletonList("Didi"));
         Role roles2 = new Role(person2, Collections.singletonList("Michi"));
 //        movie.getActorsAndRoles().add(roles1);

@@ -6,36 +6,31 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-//@Builder
+@Builder
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Node("Person")
 public class Person extends BaseEntity {
 
-    private String name;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthday;
+    @Email
+    private String email;
 
-    private Integer born;
-
-    public Person(Integer born, String name) {
-        this.born = born;
-        this.name = name;
-    }
-
-    @Relationship(value = "REVIEWED", direction =Relationship.Direction.OUTGOING)
+    @Relationship(value = "REVIEWED", direction = Relationship.Direction.OUTGOING)
     private List<Movie> reviewed = new ArrayList<>();
 
-//    private String firstName;
-//    private String lastName;
-//    private LocalDate birthday;
-//    private String email;
-//
-//
-//    //instead of @StartNode
+    @Relationship(value = "PHONE_OWNER", direction = Relationship.Direction.OUTGOING)
+    private List<Phone> phones = new ArrayList<>();
+
+    //instead of @StartNode
 //    //https://stackoverflow.com/questions/67558448/spring-data-neo4j-implement-relationship-entity-with-relationshipproperties-and
 //    @Relationship(value = "RATED", direction = Relationship.Direction.OUTGOING)// direction can be OUTGOING (default) or INCOMING
 //    private SkillRating  relationshipValue;

@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 public abstract class BaseEntity implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue()
 //    @Setter(AccessLevel.NONE)
     private Long id;
 
