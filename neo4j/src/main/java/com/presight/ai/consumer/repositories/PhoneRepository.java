@@ -19,4 +19,5 @@ public interface PhoneRepository extends Neo4jRepository<Phone, Long> {
 //    @Query("MATCH (p:Phone)<-[r:RATED]-(c:Call) RETURN p,r,c")
 //    Collection<Phone> getAllPhones();
 
+    Phone findByPhoneNumber(String phoneNumber);
 }

@@ -195,16 +195,23 @@ public class MovieRepositoryTCTest {
 
         personRepository.save(person2);
 
-        Call call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now(), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
-        Call call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
+        Call person1Phone1Call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(2), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call person1Phone1Call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
+        Call person1Phone2Call1 = createCall(person1.getPhones().get(1), person2.getPhones().get(0), LocalDateTime.now().minusDays(5), 30, RegineTypeEnum.US, RegineTypeEnum.ISRAEL);
         phoneRepository.save(person2.getPhones().get(0));
 
-        person1.getPhones().get(0).setCalls(Arrays.asList(call1, call2));
+        person1.getPhones().get(0).setCalls(Arrays.asList(person1Phone1Call1, person1Phone1Call2));
         phoneRepository.save(person1.getPhones().get(0));
+        person1.getPhones().get(1).setCalls(Collections.singletonList(person1Phone2Call1));
+        phoneRepository.save(person1.getPhones().get(1));
 
-        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), 30, RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
+        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), 40, RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
         person2.getPhones().get(0).setCalls(Collections.singletonList(call3));
         phoneRepository.save(person2.getPhones().get(0));
+
+
+        Phone byPhoneNumber = phoneRepository.findByPhoneNumber(person1.getPhones().get(0).getPhoneNumber());
+        Assert.assertNotNull(byPhoneNumber);
     }
 
 
