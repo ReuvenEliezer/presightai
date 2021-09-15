@@ -215,6 +215,7 @@ public class MovieRepositoryTCTest {
         List<Phone> allOnShortestPathBetween = phoneRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
         List<Phone> allCalls = phoneRepository.getAllCalls();
         List<Person> byFirstName = personRepository.findByFirstName(person1.getFirstName());
+        List<Person> allOnShortestPathBetween1 = personRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
 //        List<Call> all = callRepository.findAll();
 //        List<Call> allOnShortestPathBetween1 = callRepository.findAllOnShortestPathBetween(person1Phone1.getPhoneNumber(), person2Phone1.getPhoneNumber());
 //        List<Call> allOnShortestPathBetween11 = callRepository.findAllOnShortestPathBetween(person2Phone1.getPhoneNumber(), person1Phone1.getPhoneNumber());
