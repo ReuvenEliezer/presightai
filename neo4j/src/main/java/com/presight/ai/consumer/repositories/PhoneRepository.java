@@ -8,6 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 //@RepositoryRestResource(collectionResourceRel = "Phone", path = "Phone")
 public interface PhoneRepository extends Neo4jRepository<Phone, Long> {
@@ -19,5 +20,17 @@ public interface PhoneRepository extends Neo4jRepository<Phone, Long> {
 //    @Query("MATCH (p:Phone)<-[r:RATED]-(c:Call) RETURN p,r,c")
 //    Collection<Phone> getAllPhones();
 
+
+    @Query("MATCH p=()-[r:CALLER]->() RETURN p")
+    List<Phone> getAllCalls();
+
     Phone findByPhoneNumber(String phoneNumber);
+
+    @Query("MATCH p=shortestPath((bacon:Person {firstName: $person1FirstName})-[*]-(meg:Person {firstName: $person2FirstName}))\n"
+            + "WITH p, [n IN nodes(p) WHERE n:Phone] AS x\n"
+            + "UNWIND x AS m\n"
+            + "MATCH (m) <-[r:PHONE_OWNER]-(d:Person)\n"
+            + "RETURN p, collect(r), collect(d)"
+    )
+    List<Phone> findAllOnShortestPathBetween(@Param("person1FirstName") String person1FirstName, @Param("person2FirstName") String person2FirstName);
 }

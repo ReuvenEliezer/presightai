@@ -195,9 +195,9 @@ public class MovieRepositoryTCTest {
 
         personRepository.save(person2);
 
-        Call person1Phone1Call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(2), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
-        Call person1Phone1Call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
-        Call person1Phone2Call1 = createCall(person1.getPhones().get(1), person2.getPhones().get(0), LocalDateTime.now().minusDays(5), 30, RegineTypeEnum.US, RegineTypeEnum.ISRAEL);
+        Call person1Phone1Call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(2), Duration.ofMinutes(10), RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call person1Phone1Call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1),  Duration.ofMinutes(20), RegineTypeEnum.US, RegineTypeEnum.US);
+        Call person1Phone2Call1 = createCall(person1.getPhones().get(1), person2.getPhones().get(0), LocalDateTime.now().minusDays(5),  Duration.ofMinutes(30), RegineTypeEnum.US, RegineTypeEnum.ISRAEL);
         phoneRepository.save(person2.getPhones().get(0));
 
         person1.getPhones().get(0).setCalls(Arrays.asList(person1Phone1Call1, person1Phone1Call2));
@@ -205,13 +205,20 @@ public class MovieRepositoryTCTest {
         person1.getPhones().get(1).setCalls(Collections.singletonList(person1Phone2Call1));
         phoneRepository.save(person1.getPhones().get(1));
 
-        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), 40, RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
+        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), Duration.ofMinutes(40), RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
         person2.getPhones().get(0).setCalls(Collections.singletonList(call3));
         phoneRepository.save(person2.getPhones().get(0));
 
-
         Phone byPhoneNumber = phoneRepository.findByPhoneNumber(person1.getPhones().get(0).getPhoneNumber());
         Assert.assertNotNull(byPhoneNumber);
+
+        List<Phone> allOnShortestPathBetween = phoneRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
+        List<Phone> allCalls = phoneRepository.getAllCalls();
+        List<Person> byFirstName = personRepository.findByFirstName(person1.getFirstName());
+//        List<Call> all = callRepository.findAll();
+//        List<Call> allOnShortestPathBetween1 = callRepository.findAllOnShortestPathBetween(person1Phone1.getPhoneNumber(), person2Phone1.getPhoneNumber());
+//        List<Call> allOnShortestPathBetween11 = callRepository.findAllOnShortestPathBetween(person2Phone1.getPhoneNumber(), person1Phone1.getPhoneNumber());
+//        List<Call> allOnShortestPathBetween12 = callRepository.findAllOnShortestPathBetween(person1Phone2.getPhoneNumber(), person2Phone1.getPhoneNumber());
     }
 
 
@@ -220,30 +227,31 @@ public class MovieRepositoryTCTest {
         phoneRepository.deleteAll();
 
         Phone caller = Phone.builder()
-                .phoneNumber("from +972...")
+                .phoneNumber("from +972.." +
+                        ".")
                 .build();
 
         Phone called = Phone.builder()
                 .phoneNumber("to +972...")
                 .build();
 
-        Call call1 = createCall(caller, called, LocalDateTime.now(), 10, RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
-        Call call2 = createCall(caller, called, LocalDateTime.now().minusHours(1), 20, RegineTypeEnum.US, RegineTypeEnum.US);
+        Call call1 = createCall(caller, called, LocalDateTime.now(), Duration.ofMinutes(10), RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call call2 = createCall(caller, called, LocalDateTime.now().minusHours(1),  Duration.ofMinutes(20), RegineTypeEnum.US, RegineTypeEnum.US);
         phoneRepository.save(called);
 
         caller.setCalls(Arrays.asList(call1, call2));
         phoneRepository.save(caller);
     }
 
-    private Call createCall(Phone caller, Phone called, LocalDateTime now, int i, RegineTypeEnum israel, RegineTypeEnum uk) {
+    private Call createCall(Phone caller, Phone called, LocalDateTime now, Duration callDuration, RegineTypeEnum regineFrom, RegineTypeEnum regineTo) {
         return Call.builder()
                 .phone(called)
                 .fromPhoneNum(caller.getPhoneNumber())
                 .toPhoneNum(called.getPhoneNumber())
                 .calTime(now)
-                .callDuration(Duration.ofMinutes(i))
-                .regineFrom(israel)
-                .regineTo(uk)
+                .callDuration(callDuration)
+                .regineFrom(regineFrom)
+                .regineTo(regineTo)
                 .build();
     }
 
