@@ -1,35 +1,19 @@
 package com.presight.ai.consumer;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 
 import com.presight.ai.consumer.entities.*;
 import com.presight.ai.consumer.repositories.*;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
-import org.neo4j.driver.internal.shaded.reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.Neo4jContainer;
 
 //@DataNeo4jTest
 @SpringBootTest
@@ -213,7 +197,7 @@ public class MovieRepositoryTCTest {
         Assert.assertNotNull(byPhoneNumber);
 
         List<Phone> allOnShortestPathBetween = phoneRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
-        List<Phone> allCalls = phoneRepository.getAllCalls();
+        List<Phone> allPhone = phoneRepository.getAllPhone();
         List<Person> byFirstName = personRepository.findByFirstName(person1.getFirstName());
         List<Person> allOnShortestPathBetween1 = personRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
 //        List<Call> all = callRepository.findAll();
@@ -228,8 +212,7 @@ public class MovieRepositoryTCTest {
         phoneRepository.deleteAll();
 
         Phone caller = Phone.builder()
-                .phoneNumber("from +972.." +
-                        ".")
+                .phoneNumber("from +972...")
                 .build();
 
         Phone called = Phone.builder()

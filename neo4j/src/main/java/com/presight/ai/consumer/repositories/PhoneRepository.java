@@ -22,7 +22,7 @@ public interface PhoneRepository extends Neo4jRepository<Phone, Long> {
 
 
     @Query("MATCH p=()-[r:CALLER]->() RETURN p")
-    List<Phone> getAllCalls();
+    List<Phone> getAllPhone();
 
     Phone findByPhoneNumber(String phoneNumber);
 
