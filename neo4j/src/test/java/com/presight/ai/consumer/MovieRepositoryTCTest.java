@@ -281,7 +281,7 @@ public class MovieRepositoryTCTest {
                 .title("title")
                 .description("description")
                 .actors(Collections.singletonList(actor1))
-                .directors(Arrays.asList(person1,person2))
+//                .directors(Arrays.asList(person1,person2))
                 .build();
         movie = movieRepository.save(movie);
         person1.setReviewed(Collections.singletonList(movie));
