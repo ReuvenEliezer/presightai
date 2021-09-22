@@ -12,6 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -200,10 +203,96 @@ public class MovieRepositoryTCTest {
         List<Phone> allPhone = phoneRepository.getAllPhone();
         List<Person> byFirstName = personRepository.findByFirstName(person1.getFirstName());
         List<Person> allOnShortestPathBetween1 = personRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
+//        Slice<Person> sliceByName = personRepository.findSliceByName("person 1", Pageable.ofSize(10));
 //        List<Call> all = callRepository.findAll();
 //        List<Call> allOnShortestPathBetween1 = callRepository.findAllOnShortestPathBetween(person1Phone1.getPhoneNumber(), person2Phone1.getPhoneNumber());
 //        List<Call> allOnShortestPathBetween11 = callRepository.findAllOnShortestPathBetween(person2Phone1.getPhoneNumber(), person1Phone1.getPhoneNumber());
 //        List<Call> allOnShortestPathBetween12 = callRepository.findAllOnShortestPathBetween(person1Phone2.getPhoneNumber(), person2Phone1.getPhoneNumber());
+    }
+
+
+    @Test
+    public void test1() {
+        phoneRepository.deleteAll();
+        personRepository.deleteAll();
+        Phone person1Phone1 = Phone.builder()
+                .phoneNumber("+97254...")
+                .build();
+        Phone person1Phone2 = Phone.builder()
+                .phoneNumber("+97250...")
+                .build();
+        Person person1 = Person.builder()
+                .firstName("person 1")
+                .birthday(LocalDate.ofYearDay(2020, 1))
+                .phones(Arrays.asList(person1Phone1, person1Phone2))
+                .build();
+        personRepository.save(person1);
+
+
+        Phone person2Phone1 = Phone.builder()
+                .phoneNumber("+97252")
+                .build();
+
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .birthday(LocalDate.ofYearDay(2010, 1))
+                .phones(Collections.singletonList(person2Phone1))
+                .build();
+
+        personRepository.save(person2);
+
+        Call person1Phone1Call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(2), Duration.ofMinutes(10), RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);
+        Call person1Phone1Call2 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(1),  Duration.ofMinutes(20), RegineTypeEnum.US, RegineTypeEnum.US);
+        Call person1Phone2Call1 = createCall(person1.getPhones().get(1), person2.getPhones().get(0), LocalDateTime.now().minusDays(5),  Duration.ofMinutes(30), RegineTypeEnum.US, RegineTypeEnum.ISRAEL);
+        phoneRepository.save(person2.getPhones().get(0));
+
+        person1.getPhones().get(0).setCalls(Arrays.asList(person1Phone1Call1, person1Phone1Call2));
+        phoneRepository.save(person1.getPhones().get(0));
+        person1.getPhones().get(1).setCalls(Collections.singletonList(person1Phone2Call1));
+        phoneRepository.save(person1.getPhones().get(1));
+
+        Call call3 = createCall(person2.getPhones().get(0), person1.getPhones().get(0), LocalDateTime.now().minusHours(2), Duration.ofMinutes(40), RegineTypeEnum.ISRAEL, RegineTypeEnum.US);
+        person2.getPhones().get(0).setCalls(Collections.singletonList(call3));
+        phoneRepository.save(person2.getPhones().get(0));
+
+        Phone byPhoneNumber = phoneRepository.findByPhoneNumber(person1.getPhones().get(0).getPhoneNumber());
+        Assert.assertNotNull(byPhoneNumber);
+
+        List<Phone> allOnShortestPathBetween = phoneRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
+        List<Phone> allPhone = phoneRepository.getAllPhone();
+        List<Person> byFirstName = personRepository.findByFirstName(person1.getFirstName());
+        List<Person> allOnShortestPathBetween1 = personRepository.findAllOnShortestPathBetween(person1.getFirstName(), person2.getFirstName());
+//        List<Call> all = callRepository.findAll();
+//        List<Call> allOnShortestPathBetween1 = callRepository.findAllOnShortestPathBetween(person1Phone1.getPhoneNumber(), person2Phone1.getPhoneNumber());
+//        List<Call> allOnShortestPathBetween11 = callRepository.findAllOnShortestPathBetween(person2Phone1.getPhoneNumber(), person1Phone1.getPhoneNumber());
+//        List<Call> allOnShortestPathBetween12 = callRepository.findAllOnShortestPathBetween(person1Phone2.getPhoneNumber(), person2Phone1.getPhoneNumber());
+
+        Actor actor1 = Actor.builder()
+                .roles(Arrays.asList("actor 1 role", "actor2"))
+                .person(person1)
+                .build();
+
+        Actor actor2 = Actor.builder()
+                .roles(Collections.singletonList("actor 2 role"))
+                .person(person2)
+                .build();
+
+        Movie movie = Movie.builder()
+                .title("title")
+                .description("description")
+                .actors(Collections.singletonList(actor1))
+                .directors(Arrays.asList(person1,person2))
+                .build();
+        movie = movieRepository.save(movie);
+        person1.setReviewed(Collections.singletonList(movie));
+        personRepository.save(person1);
+        person2.setReviewed(Collections.singletonList(movie));
+        personRepository.save(person2);
+        List<Movie> all = movieRepository.findAll();
+//        neo4jTemplate.save(movie);
+
+        Optional<Person> person = neo4jTemplate.findById(person1.getId(), Person.class);
+        List<Movie> allOnShortestPathBetween11 = movieRepository.findAllOnShortestPathBetween(person1.getId(), person2.getId());
     }
 
 

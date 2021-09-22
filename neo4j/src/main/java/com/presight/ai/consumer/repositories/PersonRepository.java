@@ -1,6 +1,9 @@
 package com.presight.ai.consumer.repositories;
 
 import com.presight.ai.consumer.entities.Person;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +26,10 @@ public interface PersonRepository extends Neo4jRepository<Person, Long> {
 
 //    @Query("MATCH (p)-[r:RATED]->(skill) WHERE id(p) = :#{#person.id} RETURN p, r, skill")
 //    List<SkillRating> findAllByPerson(Person person);
+
+//    @Query("MATCH (n:Person) WHERE n.name = $name RETURN n :#{orderBy(#pageable)} SKIP $skip LIMIT $limit")
+//    Slice<Person> findSliceByName(String name, Pageable pageable);
+
+    @Query("MATCH (n:Person) WHERE n.name = $name RETURN n :#{orderBy(#sort)}")
+    List<Person> findAllByName(String name, Sort sort);
 }

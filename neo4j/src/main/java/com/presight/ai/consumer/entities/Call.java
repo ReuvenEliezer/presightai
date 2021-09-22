@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 @RelationshipProperties
 public class Call {//extends BaseEntity {
 
+    /**
+     * 	The only supported generated ID field on classes annotated with @RelationshipProperties is @GeneratedValue with using the default ID generator InternalIdGenerator as shown above. Other generators will lead to a failure during startup..
+     */
     @Id
     @GeneratedValue
 //    @Setter(AccessLevel.NONE)

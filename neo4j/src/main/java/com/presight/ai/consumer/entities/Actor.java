@@ -16,7 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @RelationshipProperties
-public class Actor extends BaseEntity {
+public class Actor {//extends BaseEntity {
+
+    /**
+     * 	The only supported generated ID field on classes annotated with @RelationshipProperties is @GeneratedValue with using the default ID generator InternalIdGenerator as shown above. Other generators will lead to a failure during startup..
+     */
+
+    @Id
+    @GeneratedValue
+//    @Setter(AccessLevel.NONE)
+    private Long id;
 
     @TargetNode
     private Person person;

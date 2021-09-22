@@ -18,5 +18,10 @@ public interface MovieRepository extends Neo4jRepository<Movie, Long> {
     )
     List<Movie> findAllOnShortestPathBetween(@Param("person1") Long person1, @Param("person2") Long person2);
 
+//    @Query("MATCH (m:Movie {title: $movie.__id__})\n"
+//            + "MATCH (m) <- [r:DIRECTED|REVIEWED|ACTED_IN] - (p:Person)\n"
+//            + "return m, collect(r), collect(p)")
+//    Movie findByMovie(@Param("movie") Movie movie);
+
     Movie findOneByTitle(String title);
 }
