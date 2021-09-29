@@ -2,10 +2,13 @@ info:
   app:
     name: @project.artifactId@
     version: @project.version@
-#spring:
+spring:
 #  data:
 #    mongodb:
 #      auto-index-creation: true
+  output:
+    ansi:
+      enabled: always
 kafka:
   bootstrap:
     address: localhost
