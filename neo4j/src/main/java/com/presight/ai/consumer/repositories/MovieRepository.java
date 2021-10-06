@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MovieRepository extends Neo4jRepository<Movie, Long> {
     @Query("MATCH p=shortestPath((bacon:Person {id: $person1})-[*]-(meg:Person {id: $person2}))\n"
@@ -24,4 +25,7 @@ public interface MovieRepository extends Neo4jRepository<Movie, Long> {
 //    Movie findByMovie(@Param("movie") Movie movie);
 
     Movie findOneByTitle(String title);
+
+//    @Query("MATCH (m:Movie)<-[:ACTED_IN]-(a:Person) RETURN m.title as movie, collect(a.firstName) as cast LIMIT $limit")
+//    List<Map<String, Object>> graph(int limit);
 }

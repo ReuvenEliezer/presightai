@@ -1,6 +1,7 @@
 package com.presight.ai.consumer.repositories;
 
 import com.presight.ai.consumer.entities.Person;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -16,13 +17,10 @@ import java.util.List;
 public interface PersonRepository extends Neo4jRepository<Person, Long> {
 
     //    @Query("MATCH (a:Person)-[:PHONE_OWNER]->(b:Phone) WHERE a.firstName = :#{#firstName} RETURN a,b")
-//    List<Person> findByFirstName(String firstName);
-//
-    @Query("MATCH (a:Person),(b:Phone),(c:Call) WHERE a.firstName = :#{#firstName} RETURN a,b,c")
     List<Person> findByFirstName(String firstName);
 
-    @Query("MATCH p=shortestPath((bacon:Person {firstName: $person1FirstName})-[*]-(meg:Person {firstName: $person2FirstName})) RETURN p")
-    List<Person> findAllOnShortestPathBetween(@Param("person1FirstName") String person1FirstName, @Param("person2FirstName") String person2FirstName);
+    @Query("MATCH p=shortestPath((bacon:Person {firstName: $person1FirstName})-[*]-(meg:Person {firstName: $person2FirstName})) RETURN p LIMIT $limit")
+    Slice<Person> findAllOnShortestPathBetween(String person1FirstName, String person2FirstName, Pageable pageable);
 
 //    @Query("MATCH (p)-[r:RATED]->(skill) WHERE id(p) = :#{#person.id} RETURN p, r, skill")
 //    List<SkillRating> findAllByPerson(Person person);
@@ -30,6 +28,11 @@ public interface PersonRepository extends Neo4jRepository<Person, Long> {
 //    @Query("MATCH (n:Person) WHERE n.name = $name RETURN n :#{orderBy(#pageable)} SKIP $skip LIMIT $limit")
 //    Slice<Person> findSliceByName(String name, Pageable pageable);
 
-    @Query("MATCH (n:Person) WHERE n.name = $name RETURN n :#{orderBy(#sort)}")
-    List<Person> findAllByName(String name, Sort sort);
+//    @Query("MATCH (n:Person) WHERE n.name = $name RETURN n :#{orderBy(#sort)}")
+//    List<Person> findAllByName(String name, Sort sort);
+
+
+    @Query("MATCH (p:Person)-[r:CARS]->(c:Car) WHERE c.color = $color RETURN DISTINCT p,r,c")
+    List<Person> findAllByCarColor(String color);
+
 }

@@ -1,6 +1,9 @@
 package com.presight.ai.consumer.repositories;
 
 import com.presight.ai.consumer.entities.Phone;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,7 +33,8 @@ public interface PhoneRepository extends Neo4jRepository<Phone, Long> {
             + "WITH p, [n IN nodes(p) WHERE n:Phone] AS x\n"
             + "UNWIND x AS m\n"
             + "MATCH (m) <-[r:PHONE_OWNER]-(d:Person)\n"
-            + "RETURN p, collect(r), collect(d)"
+            + "RETURN p, collect(r), collect(d)\n"
+            + "SKIP $skip LIMIT $limit"
     )
-    List<Phone> findAllOnShortestPathBetween(@Param("person1FirstName") String person1FirstName, @Param("person2FirstName") String person2FirstName);
+    Slice<Phone> findAllOnShortestPathBetween(String person1FirstName, String person2FirstName, Pageable pageable);
 }

@@ -115,6 +115,14 @@
             <version>2.0.1.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-jdbc-driver</artifactId>
+            <version>4.0.4</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <properties>
@@ -126,4 +134,14 @@
         <junit.platform.version>1.5.2</junit.platform.version>
         <neo4j.driver.version>3.2.25</neo4j.driver.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

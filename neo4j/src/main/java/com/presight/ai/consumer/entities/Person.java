@@ -24,6 +24,9 @@ public class Person extends BaseEntity {
     @Email
     private String email;
 
+    @Relationship(value = "CARS", direction = Relationship.Direction.OUTGOING)
+    private List<Car> cars = new ArrayList<>();
+
     @Relationship(value = "REVIEWED", direction = Relationship.Direction.OUTGOING)
     private List<Movie> reviewed = new ArrayList<>();
 
