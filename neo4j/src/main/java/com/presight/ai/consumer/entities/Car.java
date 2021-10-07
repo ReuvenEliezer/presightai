@@ -19,9 +19,6 @@ public class Car extends BaseEntity {
     @Relationship(value = "OWNER",direction = Relationship.Direction.OUTGOING)
     private Person person;
 
-//    @Relationship(value = "OWNERS", direction = Relationship.Direction.OUTGOING)
-//    private String make;
-//
-//    @Relationship( direction = Relationship.Direction.OUTGOING)
-//    private Company company;
+    @Relationship(value = "MANUFACTURER", direction = Relationship.Direction.OUTGOING)
+    private Company company;
 }

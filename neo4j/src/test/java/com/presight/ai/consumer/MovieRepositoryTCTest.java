@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.presight.ai.consumer.entities.*;
 import com.presight.ai.consumer.repositories.*;
+import org.apache.catalina.Store;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +57,9 @@ public class MovieRepositoryTCTest {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
 //    @Autowired
 //    private CallRepository callRepository;
@@ -212,6 +216,41 @@ public class MovieRepositoryTCTest {
 //        List<Call> allOnShortestPathBetween1 = callRepository.findAllOnShortestPathBetween(person1Phone1.getPhoneNumber(), person2Phone1.getPhoneNumber());
 //        List<Call> allOnShortestPathBetween11 = callRepository.findAllOnShortestPathBetween(person2Phone1.getPhoneNumber(), person1Phone1.getPhoneNumber());
 //        List<Call> allOnShortestPathBetween12 = callRepository.findAllOnShortestPathBetween(person1Phone2.getPhoneNumber(), person2Phone1.getPhoneNumber());
+    }
+
+    @Test
+    public void carCompanyTest() {
+        carRepository.deleteAll();
+        companyRepository.deleteAll();
+
+        Company tesla = Company.builder()
+                .name("Tesla")
+                .build();
+
+        Car model3 = Car.builder()
+                .color(ColorEnum.RED)
+                .model("Model 3")
+                .company(tesla)
+                .build();
+
+        Car modelS = Car.builder()
+                .color(ColorEnum.YELLOW)
+                .model("Model S")
+                .company(tesla)
+                .build();
+
+        Car modelX = Car.builder()
+                .color(ColorEnum.BLUE)
+                .model("Model X")
+                .company(tesla)
+                .build();
+
+
+        tesla.setCars(Arrays.asList(model3, modelS, modelX));
+        model3.setCompany(tesla);
+        carRepository.saveAll(Arrays.asList(model3, modelS, modelX));
+        companyRepository.save(tesla);
+
     }
 
     @Test
