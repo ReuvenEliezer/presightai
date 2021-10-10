@@ -4,6 +4,9 @@ import lombok.*;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -16,9 +19,10 @@ public class Car extends BaseEntity {
     private String model;
     private ColorEnum color;
 
-    @Relationship(value = "OWNER",direction = Relationship.Direction.OUTGOING)
-    private Person person;
+    @Relationship(value = "OWNER_BY",direction = Relationship.Direction.OUTGOING)
+    private List<Person> ownerBy = new ArrayList<>();
 
     @Relationship(value = "MANUFACTURER", direction = Relationship.Direction.OUTGOING)
     private Company company;
+
 }

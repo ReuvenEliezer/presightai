@@ -16,7 +16,8 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
 import java.io.IOException;
 
-//@Data
+//@Getter
+//@Setter
 //@Configuration
 //@ConfigurationProperties(prefix = "mongo") //https://www.baeldung.com/configuration-properties-in-spring-boot
 //public class MongoConfig extends AbstractMongoClientConfiguration {

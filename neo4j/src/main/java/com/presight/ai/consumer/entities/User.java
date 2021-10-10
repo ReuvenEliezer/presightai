@@ -8,7 +8,8 @@
 //import java.util.List;
 //
 //
-//@Data
+//@Getter
+//@Setter
 //@AllArgsConstructor
 //@NoArgsConstructor// Empty constructor required as of Neo4j API 2.0.5
 //@Node("User")

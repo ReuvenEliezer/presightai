@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 import com.presight.ai.consumer.entities.*;
 import com.presight.ai.consumer.repositories.*;
@@ -254,6 +255,74 @@ public class MovieRepositoryTCTest {
     }
 
     @Test
+    public void personLovesTest() {
+        personRepository.deleteAll();
+        Person person1 = Person.builder()
+                .firstName("person 1")
+                .build();
+
+
+        Person person3 = Person.builder()
+                .firstName("person 3")
+                .loves(Arrays.asList(person1))
+                .build();
+
+        person1.setLoves(Arrays.asList(person3));
+
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .loves(Arrays.asList(person1, person3))
+                .build();
+
+        personRepository.saveAll(Arrays.asList(person1, person2, person3));
+    }
+
+    @Test
+    public void personCarsTest() {
+        /**
+         * https://www.youtube.com/watch?v=l76udM3wB4U&list=PL9Hl4pk2FsvWM9GWaguRhlCQ-pa-ERd4U&index=7
+         */
+        personRepository.deleteAll();
+        carRepository.deleteAll();
+
+        Car carPerson1 = Car.builder()
+                .color(ColorEnum.RED)
+                .build();
+
+
+        Person person1 = Person.builder()
+                .firstName("person 1")
+                .carsOwner(Arrays.asList(carPerson1))
+                .carsDrives(Arrays.asList(carPerson1))
+                .build();
+
+        Person person3 = Person.builder()
+                .firstName("person 3")
+                .carsDrives(Arrays.asList(carPerson1))
+                .loves(Arrays.asList(person1))
+                .build();
+        person1.setLoves(Arrays.asList(person3));
+
+        Person person2 = Person.builder()
+                .firstName("person 2")
+                .loves(Arrays.asList(person1, person3))
+                .build();
+        carPerson1.setOwnerBy(Arrays.asList(person1));
+        carRepository.save(carPerson1);
+        personRepository.saveAll(Arrays.asList(person1, person2, person3));
+
+        /**
+         * https://youtu.be/l76udM3wB4U?t=374
+         * so we want to find out who drives a car that is owned by a lover.
+         * and in this case, we just write it out.
+         * match a person who drives a car which is owned by another person and the original person loves that other person.
+         *
+         * cypher query:
+         * MATCH (p1:Person)-[:CARS_DRIVES]->(c:Car)-[:OWNER_BY]->(p2:Person)<-[:LOVES]-(p1) RETURN p1 LIMIT 25
+         */
+    }
+
+    @Test
     public void allEntitiesTest() {
         carRepository.deleteAll();
         phoneRepository.deleteAll();
@@ -272,10 +341,10 @@ public class MovieRepositoryTCTest {
                 .firstName("person 1")
                 .birthday(LocalDate.ofYearDay(2020, 1))
                 .phones(Arrays.asList(person1Phone1, person1Phone2))
-                .cars(Arrays.asList(carPerson1))
+                .carsOwner(Arrays.asList(carPerson1))
                 .build();
         person1 = personRepository.save(person1);
-        carPerson1.setPerson(person1);
+        carPerson1.setOwnerBy(Arrays.asList(person1));
 //        carPerson1 = carRepository.save(carPerson1);
 
         Phone person2Phone1 = Phone.builder()
@@ -294,14 +363,14 @@ public class MovieRepositoryTCTest {
                 .firstName("person 2")
                 .birthday(LocalDate.ofYearDay(2010, 1))
                 .phones(Collections.singletonList(person2Phone1))
-                .cars(Arrays.asList(car1Person2, car2Person2))
+                .carsOwner(Arrays.asList(car1Person2, car2Person2))
                 .build();
 
         person2 = personRepository.save(person2);
-        car1Person2.setPerson(person2);
+        car1Person2.setOwnerBy(Arrays.asList(person2));
 //        car1Person2 = carRepository.save(car1Person2);
 
-        car2Person2.setPerson(person2);
+        car2Person2.setOwnerBy(Arrays.asList(person2));
 //        car2Person2 = carRepository.save(car2Person2);
 
         Call person1Phone1Call1 = createCall(person1.getPhones().get(0), person2.getPhones().get(0), LocalDateTime.now().minusHours(2), Duration.ofMinutes(10), RegineTypeEnum.ISRAEL, RegineTypeEnum.UK);

@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,8 +25,11 @@ public class Person extends BaseEntity {
     @Email
     private String email;
 
-    @Relationship(value = "CARS", direction = Relationship.Direction.OUTGOING)
-    private List<Car> cars = new ArrayList<>();
+    @Relationship(value = "CARS_OWNER", direction = Relationship.Direction.OUTGOING)
+    private List<Car> carsOwner = new ArrayList<>();
+
+    @Relationship(value = "CARS_DRIVES", direction = Relationship.Direction.OUTGOING)
+    private List<Car> carsDrives = new ArrayList<>();
 
     @Relationship(value = "REVIEWED", direction = Relationship.Direction.OUTGOING)
     private List<Movie> reviewed = new ArrayList<>();
@@ -33,8 +37,12 @@ public class Person extends BaseEntity {
     @Relationship(value = "PHONE_OWNER", direction = Relationship.Direction.OUTGOING)
     private List<Phone> phones = new ArrayList<>();
 
+    @Relationship(value = "LOVES", direction = Relationship.Direction.OUTGOING)
+    private List<Person> loves = new ArrayList<>();
+
     //instead of @StartNode
 //    //https://stackoverflow.com/questions/67558448/spring-data-neo4j-implement-relationship-entity-with-relationshipproperties-and
 //    @Relationship(value = "RATED", direction = Relationship.Direction.OUTGOING)// direction can be OUTGOING (default) or INCOMING
 //    private SkillRating  relationshipValue;
+
 }
