@@ -29,6 +29,10 @@ services:
       - "11015:11015"
     volumes:
       - /home/eliezer/:/mnt/eliezer/
+    environment:
+      DEBUG: 1
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
   mongo:
     image: mongo:latest
     restart: always
